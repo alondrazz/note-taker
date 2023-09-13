@@ -1,6 +1,6 @@
 const fb = require('express').Router();
-const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
-const uuid = require('../helpers/uuid');
+const { readFromFile, readAndAppend } = require('../public/helpers/fsUtils');
+const uuid = require('../public/helpers/uuid');
 
 // GET Route for retrieving all the feedback
 fb.get('/', (req, res) => {

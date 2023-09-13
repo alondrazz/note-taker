@@ -1,7 +1,7 @@
 const express = require('express');
 const fb = express.Router();
-const { readFromFile, readAndAppend } = require('./helpers/fsUtils');
-const uuid = require('./helpers/uuid');
+const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
+const uuid = require('../helpers/uuid');
 
 // GET Route for retrieving all the feedback
 fb.get('/', (req, res) => {
@@ -40,5 +40,7 @@ fb.post('/', (req, res) => {
     res.json('Error in posting newNote');
   }
 });
+
+
 
 module.exports = fb;
