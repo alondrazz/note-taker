@@ -1,47 +1,54 @@
 const express = require('express');
 const app = express();
-// const fb = express.Router();
 const { readFromFile, readAndAppend } = require('./public/helpers/fsUtils');
 const uuid = require('./public/helpers/uuid');
 const path = require('path');
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 
-// GET Route for retrieving all the feedback
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/', (req, res) => {
-    console.info(`${req.method} request received for newNotes`);
-    readFromFile('./db.json').then((data) => res.json(JSON.parse(data)));
-  });
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
-    // Log that a POST request was received
-  app.post('/', (req, res) => {
-    console.info(`${req.method} request received to submit newNotes`);
-  
-  // Destructuring assignment for the items in req.body
-  const { title, content } = req.body;
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'notes.html'));
+});
 
-  // If all the required properties are present
-  if (title && content) {
-    // Variable for the object we will save
-    const newNotes = {
+app.get('/api/notes', (req, res) => {
+  readFromFile('./db/db.json')
+    .then((data) => {
+      res.json(JSON.parse(data));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to read data' });
+    });
+});
+
+app.post('/api/notes', (req, res) => {
+  const { title, text } = req.body;
+
+  if (title && text) {
+    const newNote = {
       title,
-      content,
-      note_id: uuid(),
+      text,
+      id: uuid(),
     };
 
-    readAndAppend(newNotes, './db.json');
-
-    const response = {
-      status: 'success',
-      body: newNotes,
-    };
-
-    res.json(response);
+    readAndAppend(newNote, './db/db.json')
+      .then(() => {
+        res.status(201).json({ status: 'success', body: newNote });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to append data' });
+      });
   } else {
-    res.json('Error in posting newNote');
+    res.status(400).json({ error: 'Both title and text are required' });
   }
 });
 
-app.listen(PORT, ()=> console.log("listening on port "+ PORT))
-
-//module.exports = fb;
+app.listen(PORT, () => console.log("Listening on port " + PORT));
