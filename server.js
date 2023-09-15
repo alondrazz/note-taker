@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001
 // GET Route for retrieving all the feedback
 app.get('/', (req, res) => {
     console.info(`${req.method} request received for newNotes`);
-    readFromFile('./db/newNotes.json').then((data) => res.json(JSON.parse(data)));
+    readFromFile('./db.json').then((data) => res.json(JSON.parse(data)));
   });
 
     // Log that a POST request was received
@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
       note_id: uuid(),
     };
 
-    readAndAppend(newNotes, './db/newNotes.json');
+    readAndAppend(newNotes, './db.json');
 
     const response = {
       status: 'success',

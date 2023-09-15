@@ -6,7 +6,7 @@ const uuid = require('../public/helpers/uuid');
 fb.get('/', (req, res) => {
     console.info(`${req.method} request received for newNotes`);
   
-    readFromFile('./db/newNotes.json').then((data) => res.json(JSON.parse(data)));
+    readFromFile('./db.json').then((data) => res.json(JSON.parse(data)));
   });
 
   
@@ -27,7 +27,7 @@ fb.post('/', (req, res) => {
       note_id: uuid(),
     };
 
-    readAndAppend(newNotes, './db/newNotes.json')
+    readAndAppend(newNotes, './db.json')
     .then(() => {
     const response = {
       status: 'success',
