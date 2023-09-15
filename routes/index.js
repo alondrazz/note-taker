@@ -12,9 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // Define the route for notes
-app.use('/routes/newNotes', notesRouter);
+app.use('/newNotes', notesRouter);
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3001;
 
 // Start the server
 app.listen(PORT, () => {

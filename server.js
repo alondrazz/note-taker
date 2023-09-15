@@ -1,19 +1,20 @@
 const express = require('express');
-const fb = express.Router();
-const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
-const uuid = require('../helpers/uuid');
+const app = express();
+// const fb = express.Router();
+const { readFromFile, readAndAppend } = require('./public/helpers/fsUtils');
+const uuid = require('./public/helpers/uuid');
+const path = require('path');
+
+const PORT = process.env.PORT || 3001
 
 // GET Route for retrieving all the feedback
-fb.get('/', (req, res) => {
+app.get('/', (req, res) => {
     console.info(`${req.method} request received for newNotes`);
-  
     readFromFile('./db/newNotes.json').then((data) => res.json(JSON.parse(data)));
   });
 
-  
-// POST Route for submitting feedback
-fb.post('/', (req, res) => {
     // Log that a POST request was received
+  app.post('/', (req, res) => {
     console.info(`${req.method} request received to submit newNotes`);
   
   // Destructuring assignment for the items in req.body
@@ -41,6 +42,6 @@ fb.post('/', (req, res) => {
   }
 });
 
+app.listen(PORT, ()=> console.log("listening on port "+ PORT))
 
-
-module.exports = fb;
+//module.exports = fb;
